@@ -22,6 +22,11 @@ http {
 	# into as many include's as you want to make it cleaner
 	include       <%= config['config_path'] || 'conf/' %>mime.types;
 
+	<% if config['passenger_root'] && config['passenger_ruby'] %>
+    passenger_root <%= config['passenger_root'] %>;
+    passenger_ruby <%= config['passenger_ruby'] %>;
+	<% end %>
+
 	# set a default type for the rare situation that
 	# nothing matches from the mimie-type include
 	default_type  application/octet-stream;
@@ -100,7 +105,10 @@ http {
     
     # doc root
     root <%= (config['root'][ site['root'] || 'default' ] || site['root']) % name %>;
-
+<% if site['passenger'] %>
+    passenger_enabled on;
+    rails_env <%= site['passenger']['environment'] || 'development' %>;
+<% end %>
     # vhost specific access log
     access_log  logs/<%= name %>.access.log  main;
 
