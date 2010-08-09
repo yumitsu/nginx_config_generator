@@ -18,7 +18,7 @@ events {
 http {
 	# pull in mime-types. You can break out your config 
 	# into as many include's as you want to make it cleaner
-	include       <%= config['config_path'] || 'conf/' %>mime.types;
+	include       <%= config['config_path'] || '' %>mime.types;
 
 	<% if config['passenger_root'] && config['passenger_ruby'] %>
     passenger_root <%= config['passenger_root'] %>;
@@ -35,7 +35,7 @@ http {
                 		'"$http_user_agent" "http_x_forwarded_for"';
 
 	# main access log
-	access_log  <%= config['log_path'] || 'logs/' %>access.log;
+	access_log  <%= config['log_path'] || 'logs/' %>access.log main;
 
 	# main error log
     error_log  <%= config['log_path'] || 'logs/' %>error.log;
@@ -103,12 +103,12 @@ http {
     
     # doc root
     root <%= (config['root'][ site['root'] || 'default' ] || site['root']) % name %>;
-<% if site['passenger'] %>
+<% if site['rails_env'] %>
     passenger_enabled on;
-    rails_env <%= site['passenger']['environment'] || 'development' %>;
+    rails_env <%= site['rails_env'] %>;
 <% end %>
     # vhost specific access log
-    access_log  logs/<%= name %>.access.log  main;
+    access_log  logs/<%= name %>.access.log main;
 
     #Set the max size for file uploads to 50Mb
     client_max_body_size  50M;
@@ -136,6 +136,9 @@ http {
 <% end %>
 
     location / {
+<% if site['rails_env'] %>
+        passenger_enabled on;
+<% end %>
 <% Array(site['rewrite'] || site['rewrites']).each do |rewrite| %>
       rewrite <%= rewrite %> break;
 <% end %>
