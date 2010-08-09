@@ -96,7 +96,7 @@ http {
 <% else %>
 	
     # port to listen on. Can also be set to an IP:PORT
-    listen       80;
+    listen       <%= site['listen'] || '80' %>;
 
     # sets the domain[s] that this vhost server requests for
     server_name  <%= site['server_name'] %>;

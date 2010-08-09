@@ -12,6 +12,7 @@ begin
     gemspec.authors = ["Kevin Thompson", "Chris Wanstrath"]
     gemspec.executables = ["generate_nginx_config"]
   end  
+  Jeweler::GemcutterTasks.new
 rescue LoadError  
   puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"  
 end  
