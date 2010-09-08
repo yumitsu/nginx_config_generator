@@ -5,8 +5,8 @@ def error(message) puts(message) || exit end
 def file(file) "#{File.dirname(__FILE__)}/#{file}" end
 
 if ARGV.include? '--example'
-  example = file:'config.yml.example'
-  error open(example).read 
+  example = file('config.yml.example')
+  error open(example).read
 end
 
 env_in  = ENV['NGINX_CONFIG_YAML']
@@ -24,7 +24,7 @@ template = if custom_template_index = (ARGV.index('--template') || ARGV.index('-
   ARGV.delete_at(custom_template_index) # and its value
   custom
 else
-  file:'nginx.erb'
+  file('nginx.erb')
 end
 
 if File.exists?(out_file = env_out || ARGV.shift || 'nginx.conf') && !overwrite
